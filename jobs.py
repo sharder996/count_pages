@@ -20,10 +20,10 @@ from calibre_plugins.count_pages.download import DownloadPagesWorker
 from calibre_plugins.count_pages.statistics import (get_page_count, get_pdf_page_count,
                                     get_word_count, get_text_analysis, get_gunning_fog_index,
                                     get_flesch_reading_ease, get_flesch_kincaid_grade_level,
-                                    get_cbr_page_count, get_cbz_page_count, get_obi2_level)
+                                    get_cbr_page_count, get_cbz_page_count)
 
 def do_count_statistics(books_to_scan, pages_algorithm,
-                        nltk_pickle, obi2_resources, custom_chars_per_page, icu_wordcount,
+                        nltk_pickle, custom_chars_per_page, icu_wordcount,
                         page_count_mode, download_sources, cpus, notification=lambda x, y:x):
     '''
     Master job, to launch child jobs to count pages in this list of books
@@ -34,7 +34,7 @@ def do_count_statistics(books_to_scan, pages_algorithm,
     for book_id, title, book_path, download_sources, statistics_to_run in books_to_scan:
         args = ['calibre_plugins.count_pages.jobs', 'do_statistics_for_book',
                 (book_path, pages_algorithm, page_count_mode, download_sources, statistics_to_run,
-                 nltk_pickle, obi2_resources, custom_chars_per_page, icu_wordcount)]
+                 nltk_pickle, custom_chars_per_page, icu_wordcount)]
 #         print("do_count_statistics - args=", args)
         print("do_count_statistics - book_path=%s, pages_algorithm=%s, page_count_mode=%s, statistics_to_run=%s, custom_chars_per_page=%s, icu_wordcount=%s"
               % (book_path, pages_algorithm, page_count_mode, 
@@ -101,9 +101,6 @@ def do_count_statistics(books_to_scan, pages_algorithm,
             elif stat == cfg.STATISTIC_GUNNING_FOG:
                 if stat in results and results[stat]:
                     print('\tComputed %.1f Gunning Fog Index' % results[stat])
-            elif stat == cfg.STATISTIC_OBI2_LEVEL:
-                if stat in results and results[stat]:
-                    print('\tComputed OBI2 grade level %d' % results[stat])
 
         print(job.details)
 
@@ -118,7 +115,7 @@ def do_count_statistics(books_to_scan, pages_algorithm,
 
 def do_statistics_for_book(book_path, pages_algorithm, page_count_mode, 
                            download_sources, statistics_to_run,
-                           nltk_pickle, obi2_resources, custom_chars_per_page, icu_wordcount):
+                           nltk_pickle, custom_chars_per_page, icu_wordcount):
     '''
     Child job, to count statistics in this specific book
     '''
@@ -190,8 +187,6 @@ def do_statistics_for_book(book_path, pages_algorithm, page_count_mode,
                             results[cfg.STATISTIC_FLESCH_GRADE] = get_flesch_kincaid_grade_level(text_analysis)
                         if cfg.STATISTIC_GUNNING_FOG in statistics_to_run:
                             results[cfg.STATISTIC_GUNNING_FOG] = get_gunning_fog_index(text_analysis)
-                        if cfg.STATISTIC_OBI2_LEVEL in statistics_to_run:
-                            results[cfg.STATISTIC_OBI2_LEVEL] = get_obi2_level(iterator, obi2_resources, lang)
             finally:
                 if iterator:
                     iterator.__exit__()

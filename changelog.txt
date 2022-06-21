@@ -1,7 +1,3 @@
-[B]Version 1.12.0[/B] - 21 June 2022 - by sharder996
-New: Added OBI2 reading difficulty evaluation for Japanese text
-Update: Added additional page count download sources
-
 [B]Version 1.11.2[/B] - 26 January 2022 - by davidfor
 Change: Update to be compatible with Calibre v6/Qt6.
 

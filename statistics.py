@@ -20,7 +20,6 @@ from calibre.utils.html2text import html2text
 from calibre.utils.ipc.simple_worker import fork_job, WorkerError
 
 from calibre_plugins.count_pages.nltk_lite.textanalyzer import TextAnalyzer
-from calibre_plugins.count_pages.nltk_lite.obi2.obi2 import Obi2
 
 RE_HTML_BODY = re.compile(u'<body[^>]*>(.*)</body>', re.UNICODE | re.DOTALL | re.IGNORECASE)
 RE_STRIP_MARKUP = re.compile(u'<[^>]+>', re.UNICODE)
@@ -359,18 +358,6 @@ def get_gunning_fog_index(text_analysis):
     score = 0.4 * ((text_analysis['averageWordsPerSentence']) + (100 * (text_analysis['complexwordCount']/text_analysis['wordCount'])))
     print('\tGunning Fog:', score)
     return score
-
-
-def get_obi2_level(iterator, obi2_resources, lang=None):
-    if lang and lang == 'jpn':
-        epub_html = _read_epub_contents(iterator)
-        re.sub(r'<rt>([ぁ-んァ-ン]+)<\/rt>', '', epub_html)                             # Remove furigana
-        epub_text = html2text(epub_html)                                                # Remove html tags
-        epub_text = re.sub(r'\!\[Unnamed image\]\([A-Za-z\/0-9\.]+\)', '', epub_text)   # Remove image references
-        epub_text = re.sub(r'\(part[0-9\.A-Za-z#-]+\)', '', epub_text)                  # Remove file references
-
-        o = Obi2(obi2_resources)
-        return o.analyze_text(epub_text)
 
 
 # calibre-debug -e statistics.py

@@ -47,7 +47,6 @@ KEY_WORDS_CUSTOM_COLUMN = 'customColumnWords'
 KEY_FLESCH_READING_CUSTOM_COLUMN = 'customColumnFleschReading'
 KEY_FLESCH_GRADE_CUSTOM_COLUMN = 'customColumnFleschGrade'
 KEY_GUNNING_FOG_CUSTOM_COLUMN = 'customColumnGunningFog'
-KEY_OBI2_LEVEL_CUSTOM_COLUMN = 'customColumnOBI2'
 
 KEY_BUTTON_DEFAULT = 'buttonDefault'
 KEY_OVERWRITE_EXISTING = 'overwriteExisting'
@@ -171,14 +170,12 @@ STATISTIC_WORD_COUNT = 'WordCount'
 STATISTIC_FLESCH_READING = 'FleschReading'
 STATISTIC_FLESCH_GRADE = 'FleschGrade'
 STATISTIC_GUNNING_FOG = 'GunningFog'
-STATISTIC_OBI2_LEVEL = 'OBI2'
 ALL_STATISTICS = {
                   STATISTIC_PAGE_COUNT: KEY_PAGES_CUSTOM_COLUMN,
                   STATISTIC_WORD_COUNT: KEY_WORDS_CUSTOM_COLUMN,
                   STATISTIC_FLESCH_READING: KEY_FLESCH_READING_CUSTOM_COLUMN,
                   STATISTIC_FLESCH_GRADE: KEY_FLESCH_GRADE_CUSTOM_COLUMN,
                   STATISTIC_GUNNING_FOG: KEY_GUNNING_FOG_CUSTOM_COLUMN,
-                  STATISTIC_OBI2_LEVEL: KEY_OBI2_LEVEL_CUSTOM_COLUMN
                   }
 
 DEFAULT_STORE_VALUES = {
@@ -200,7 +197,6 @@ DEFAULT_LIBRARY_VALUES = {
                           KEY_FLESCH_READING_CUSTOM_COLUMN: '',
                           KEY_FLESCH_GRADE_CUSTOM_COLUMN: '',
                           KEY_GUNNING_FOG_CUSTOM_COLUMN: '',
-                          KEY_OBI2_LEVEL_CUSTOM_COLUMN: ''
                           }
 
 PLUGIN_ICONS = [
@@ -337,7 +333,6 @@ class ConfigWidget(QWidget):
         library_config[KEY_FLESCH_READING_CUSTOM_COLUMN] = self.statistics_tab.flesch_reading_column_combo.get_selected_column()
         library_config[KEY_FLESCH_GRADE_CUSTOM_COLUMN] = self.statistics_tab.flesch_grade_column_combo.get_selected_column()
         library_config[KEY_GUNNING_FOG_CUSTOM_COLUMN] = self.statistics_tab.gunning_fog_column_combo.get_selected_column()
-        library_config[KEY_OBI2_LEVEL_CUSTOM_COLUMN] = self.statistics_tab.obi2_column_combo.get_selected_column()
         set_library_config(db, library_config)
 
     def get_custom_columns(self):
@@ -754,17 +749,6 @@ class StatisticsTab(QWidget):
         gunning_fog_column_label.setBuddy(self.gunning_fog_column_combo)
         readability_layout.addWidget(gunning_fog_column_label, 3, 0, 1, 1)
         readability_layout.addWidget(self.gunning_fog_column_combo, 3, 1, 1, 2)
-
-        obi2_column_label = QLabel(_('&OBI2 Grade Level:'), self)
-        toolTip = _('Specify the custom column to store a computed OBI2 grade level.\n'
-                    'Leave this blank if you do not want to calculate it')
-        obi2_column_label.setToolTip(toolTip)
-        obi2_col = library_config.get(KEY_OBI2_LEVEL_CUSTOM_COLUMN, '')
-        self.obi2_column_combo = CustomColumnComboBox(self, avail_columns, obi2_col)
-        self.obi2_column_combo.setToolTip(toolTip)
-        obi2_column_label.setBuddy(self.obi2_column_combo)
-        readability_layout.addWidget(obi2_column_label, 4, 0, 1, 1)
-        readability_layout.addWidget(self.obi2_column_combo, 4, 1, 1, 2)
 
         self._page_algorithm_changed()
 

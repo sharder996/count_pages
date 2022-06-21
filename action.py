@@ -51,7 +51,6 @@ class CountPagesAction(InterfaceAction):
 
         self.rebuild_menus()
         self.nltk_pickle = self._get_nltk_resource()
-        self.obi2_resources = self._get_obi2_resources()
 
         # Assign our menu to this action and an icon
         self.qaction.setMenu(self.menu)
@@ -122,14 +121,6 @@ class CountPagesAction(InterfaceAction):
         ENGLISH_PICKLE_FILE = 'nltk_lite/english.pickle'
         pickle_data = self.load_resources([ENGLISH_PICKLE_FILE])[ENGLISH_PICKLE_FILE]
         return pickle_data
-
-    def _get_obi2_resources(self):
-        # Retrieve resource files for obi2 evaluation. Can't do it from within the nltk
-        # code because of our funky situation of executing a plugin from a zip file.
-        # So we retrieve it here and pass it through when executing jobs.
-        OP_CHAR_FILE = 'nltk_lite/obi2/jchar.utf8'
-        MODEL_FILE = 'nltk_lite/obi2/Obi2-T13.model'
-        return self.load_resources([OP_CHAR_FILE, MODEL_FILE])
 
     def _count_pages_on_selected(self, mode, download_source=None):
         if not self.is_library_selected:
@@ -247,7 +238,7 @@ class CountPagesAction(InterfaceAction):
         func = 'arbitrary_n'
         cpus = self.gui.job_manager.server.pool_size
         args = ['calibre_plugins.count_pages.jobs', 'do_count_statistics',
-                (books_to_scan, pages_algorithm, self.nltk_pickle, self.obi2_resources, custom_chars_per_page,
+                (books_to_scan, pages_algorithm, self.nltk_pickle, custom_chars_per_page,
                  icu_wordcount, page_count_mode, download_source, cpus)]
         desc = _('Count Page/Word Statistics')
         job = self.gui.job_manager.run_job(
