@@ -1,4 +1,4 @@
-[B]Version 1.11.3[/B] - 21 June 2022 - by sharder996
+[B]Version 1.12.0[/B] - 21 June 2022 - by sharder996
 New: Added OBI2 reading difficulty evaluation for Japanese text
 Update: Added additional page count download sources
 
